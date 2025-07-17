@@ -1,0 +1,17 @@
+{
+    "development": {
+        "user": "postgres",
+        "password": "postgres",
+        "host": "localhost",
+        "port": 5432,
+        "database": "language_learning_tracker_db"
+    },
+        "test": {
+        "user": "postgres",
+        "password": "postgres",
+        "host": "localhost",
+        "port": 5432,
+        "database": "language_learning_tracker_db"
+    },
+        "production": {}
+}
