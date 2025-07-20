@@ -1,7 +1,5 @@
-'use strict';
-const {
-  Model
-} = require('sequelize');
+"use strict";
+const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
     /**
@@ -13,17 +11,57 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
     }
   }
-  User.init({
-    firstName: DataTypes.STRING,
-    lastName: DataTypes.STRING,
-    email: DataTypes.STRING,
-    password: DataTypes.TEXT,
-    isMale: DataTypes.BOOLEAN
-  }, {
-    sequelize,
-    modelName: 'User',
-  });
+  User.init(
+    {
+      firstName: {
+        field: "first_name",
+        allowNull: false,
+        type: DataTypes.STRING(32),
+        validate: {
+          notEmpty: true,
+          notNull: true,
+        },
+      },
+      lastName: {
+        field: "last_name",
+        allowNull: false,
+        type: DataTypes.STRING(32),
+        validate: {
+          notEmpty: true,
+          notNull: true,
+        },
+      },
+      email: {
+        unique: true,
+        allowNull: false,
+        type: DataTypes.STRING(128),
+        validate: {
+          notEmpty: true,
+          notNull: true,
+          isEmail: true,
+        },
+      },
+      password: {
+        field: "password_hash",
+        allowNull: false,
+        type: DataTypes.TEXT,
+      },
+      isMale: { field: "is_male", allowNull: false, type: DataTypes.BOOLEAN },
+      avatar: {
+        allowNull: true,
+        type: DataTypes.STRING(512),
+        validate: {
+          len: [0, 512],
+          isUrl: true,
+        },
+      },
+    },
+    {
+      sequelize,
+      modelName: "User",
+      tableName: "users",
+      underscored: true,
+    }
+  );
   return User;
 };
-
-//https://www.youtube.com/watch?v=DX62gkT1Q_I&list=PLxQIdU5bMkOiUg3p6X4BXVpIfWzMaLV7l&index=231
