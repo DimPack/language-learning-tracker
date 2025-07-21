@@ -55,7 +55,6 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING(512),
         validate: {
           len: [0, 512],
-          isUrl: true,
         },
       },
     },
