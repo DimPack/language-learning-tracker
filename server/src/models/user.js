@@ -1,4 +1,7 @@
 "use strict";
+const CONSTANTANTS = require("../constants");
+const bcrypt = require("bcryptjs");
+
 const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
@@ -63,5 +66,35 @@ module.exports = (sequelize, DataTypes) => {
       underscored: true,
     }
   );
+
+  User.beforeCreate((user, options) => {
+    if (!user.avatar) {
+      user.avatar = user.isMale
+        ? CONSTANTANTS.DEFAULT_MALE_AVATAR
+        : CONSTANTANTS.DEFAULT_FEMALE_AVATAR;
+    }
+  });
+
+  User.beforeUpdate((user, options) => {
+    if (user.changed("isMale")) {
+      const isAvatarDefault =
+        user.avatar === CONSTANTANTS.DEFAULT_MALE_AVATAR ||
+        user.avatar === CONSTANTANTS.DEFAULT_FEMALE_AVATAR;
+
+      if (isAvatarDefault) {
+        user.avatar = user.isMale
+          ? CONSTANTANTS.DEFAULT_MALE_AVATAR
+          : CONSTANTANTS.DEFAULT_FEMALE_AVATAR;
+      }
+    }
+  });
+
+  User.beforeSave(async (user, options) => {
+    if (user.changed("password")) {
+      const salt = await bcrypt.genSalt(10);
+      user.password = await bcrypt.hash(user.password, salt);
+    }
+  });
+
   return User;
 };
