@@ -22,7 +22,9 @@ module.exports.findAllUsers = async (req, res, next) => {
 };
 
 module.exports.findById = async (req, res, next) => {
-  const { params: { userId } } = req;
+  const {
+    params: { userId },
+  } = req;
   if (!userId) {
     return res.status(400).send({ error: "User ID is required" });
   }
@@ -40,8 +42,10 @@ module.exports.findById = async (req, res, next) => {
 };
 
 module.exports.deleteUserById = async (req, res, next) => {
-  const { params: { userId } } = req;
- 
+  const {
+    params: { userId },
+  } = req;
+
   try {
     const user = await User.findByPk(userId);
     if (!user) {
@@ -49,6 +53,24 @@ module.exports.deleteUserById = async (req, res, next) => {
     }
     await user.destroy();
 
+    res.status(200).send({ data: user });
+  } catch (error) {
+    next(error);
+  }
+};
+
+module.exports.updateUser = async (req, res, next) => {
+  try {
+    const {
+      params: { userId },
+      body,
+    } = req;
+    
+    const user = await User.findByPk(userId);
+    if (!user) {
+      return res.status(404).send({ error: "User not found" });
+    }
+    await user.update(body);
     res.status(200).send({ data: user });
   } catch (error) {
     next(error);
