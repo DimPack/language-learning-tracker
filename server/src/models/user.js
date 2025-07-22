@@ -97,3 +97,4 @@ module.exports = (sequelize, DataTypes) => {
 
   return User;
 };
+//https://www.youtube.com/watch?v=F2riDTHB6hc&list=PLxQIdU5bMkOiUg3p6X4BXVpIfWzMaLV7l&index=234

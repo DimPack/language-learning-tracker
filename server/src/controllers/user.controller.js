@@ -65,13 +65,38 @@ module.exports.updateUser = async (req, res, next) => {
       params: { userId },
       body,
     } = req;
-    
+
     const user = await User.findByPk(userId);
     if (!user) {
       return res.status(404).send({ error: "User not found" });
     }
     await user.update(body);
     res.status(200).send({ data: user });
+  } catch (error) {
+    next(error);
+  }
+};
+
+module.exports.registerUser = async (req, res, next) => {
+  try {
+    const { firstName, lastName, email, password, isMale, avatar } = req.body;
+
+    const exitingUser = await User.findOne({ where: { email } });
+    if (exitingUser) {
+      return res
+        .status(400)
+        .send({ error: "User with this email already exists" });
+    }
+
+    const user = await User.create({
+      firstName,
+      lastName,
+      email,
+      password,
+      isMale,
+      avatar,
+    });
+    res.status(201).send({ message: 'User created successfully', data: user });
   } catch (error) {
     next(error);
   }

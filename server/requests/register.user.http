@@ -1,0 +1,12 @@
+POST http://localhost:3000/register/ HTTP/1.1
+Content-Type: application/json
+
+
+{    
+    "firstName":"Kate",
+    "lastName":"Sma",
+    "email":"kate432@gmail.com",
+    "password":"dasdasdasd3232",
+    "isMale":"true",
+    "avatar":"https://images.app.goo.gl/9S2TFbAxceN5cSw38"
+}
