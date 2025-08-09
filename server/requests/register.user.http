@@ -3,10 +3,10 @@ Content-Type: application/json
 
 
 {    
-    "firstName":"Kate",
+    "firstName":"Ann",
     "lastName":"Sma",
-    "email":"kate432@gmail.com",
-    "password":"dasdasdasd3232",
-    "isMale":"true",
-    "avatar":"https://images.app.goo.gl/9S2TFbAxceN5cSw38"
+    "email":"ann432@gmail.com",
+    "password":"wwwwwwww123",
+    "isMale":"false",
+    "avatar":""
 }

@@ -1,4 +1,6 @@
 const { User } = require("../models");
+const bcrypt = require("bcryptjs");
+const { generateToken } = require('../helpers/generateToken');
 
 module.exports.createUser = async (req, res, next) => {
   try {
@@ -88,7 +90,7 @@ module.exports.registerUser = async (req, res, next) => {
         .send({ error: "User with this email already exists" });
     }
 
-    const user = await User.create({
+    const newUser = await User.create({
       firstName,
       lastName,
       email,
@@ -96,7 +98,31 @@ module.exports.registerUser = async (req, res, next) => {
       isMale,
       avatar,
     });
-    res.status(201).send({ message: 'User created successfully', data: user });
+
+    const token = generateToken(newUser);
+
+    res.status(201).send({ message: "User created successfully", token, data: newUser });
+  } catch (error) {
+    next(error);
+  }
+};
+
+module.exports.login = async (req, res, next) => {
+  try {
+    const { email, password } = req.body;
+
+    const loginUser = await User.findOne({ where: { email } });
+    if (!loginUser) {
+      return res.status(404).send({ error: "User not found" });
+    }
+
+    const isMatch = await bcrypt.compare(password, loginUser.password);
+    if (!isMatch) {
+      return res.status(401).send({ error: "Invalid credentials" });
+    }
+
+    const token = generateToken(loginUser);
+    res.status(200).send({ message: "Login successful", token, data: loginUser });
   } catch (error) {
     next(error);
   }

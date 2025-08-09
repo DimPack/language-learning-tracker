@@ -66,6 +66,12 @@ module.exports = (sequelize, DataTypes) => {
     }
   );
 
+  User.prototype.toJSON = function () {
+    const values = { ...this.get() };
+    delete values.password;
+    return values;
+  };
+
   User.beforeCreate((user, options) => {
     if (!user.avatar) {
       user.avatar = user.isMale
@@ -97,4 +103,3 @@ module.exports = (sequelize, DataTypes) => {
 
   return User;
 };
-//https://www.youtube.com/watch?v=F2riDTHB6hc&list=PLxQIdU5bMkOiUg3p6X4BXVpIfWzMaLV7l&index=234
