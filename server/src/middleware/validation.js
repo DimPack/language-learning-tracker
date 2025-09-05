@@ -1,4 +1,5 @@
 const { body, validationResult } = require("express-validator");
+
 module.exports.validateUserRegister = async (req, res, next) => {
   try {
     await body("firstName")
@@ -59,4 +60,27 @@ module.exports.validateUserRegister = async (req, res, next) => {
   } catch (error) {
     next(error);
   }
+};
+
+module.exports.validateUserLogin = async (req, res, next) => {
+ try {
+    await body("email")
+      .isEmail()
+      .withMessage("Valid email is required")
+      .normalizeEmail()
+      .run(req);
+
+    await body("password")
+      .notEmpty()
+      .withMessage("Password is required")
+      .run(req);
+
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+    next();
+  } catch (error) {
+      next(error);
+    }
 };

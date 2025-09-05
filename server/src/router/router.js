@@ -1,11 +1,11 @@
 const { Router } = require('express');
 const { createUser, findAllUsers, findById, deleteUserById, updateUser, registerUser, login } = require('../controllers/user.controller');
-const { validateUserRegister } = require('../middleware/validateUserRegister');
+const { validateUserRegister, validateUserLogin } = require('../middleware/validation');
 
 const router = Router();
 
 router.post('/register', validateUserRegister, registerUser);
-router.post('/login', login);
+router.post('/login', validateUserLogin, login);
 
 router.post('/users', createUser);
 router.get('/users', findAllUsers);
