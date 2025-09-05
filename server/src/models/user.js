@@ -96,7 +96,7 @@ module.exports = (sequelize, DataTypes) => {
 
   User.beforeSave(async (user, options) => {
     if (user.changed("password")) {
-      const salt = await bcrypt.genSalt(10);
+      const salt = await bcrypt.genSalt(CONSTANTANTS.SALT_ROUNDS);
       user.password = await bcrypt.hash(user.password, salt);
     }
   });
