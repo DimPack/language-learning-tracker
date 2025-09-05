@@ -1,6 +1,6 @@
 const { User } = require("../models");
 const bcrypt = require("bcryptjs");
-const { generateToken } = require('../helpers/generateToken');
+const generateToken = require('../helpers/generateToken');
 
 module.exports.createUser = async (req, res, next) => {
   try {
@@ -99,7 +99,7 @@ module.exports.registerUser = async (req, res, next) => {
       avatar,
     });
 
-    const token = generateToken(newUser);
+    const token = await generateToken(newUser);
 
     res.status(201).send({ message: "User created successfully", token, data: newUser });
   } catch (error) {
@@ -121,7 +121,7 @@ module.exports.login = async (req, res, next) => {
       return res.status(401).send({ error: "Invalid credentials" });
     }
 
-    const token = generateToken(loginUser);
+    const token = await generateToken(loginUser);
     res.status(200).send({ message: "Login successful", token, data: loginUser });
   } catch (error) {
     next(error);

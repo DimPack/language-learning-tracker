@@ -1,14 +1,11 @@
-const jwt = require("jsonwebtoken");
+const { promisify } = require("util");
+const jwtSign = promisify(jwt.sign);
 
-function generateToken(user) {
-  return jwt.sign(
-    {
-      id: user.id,
-      email: user.email,
-    },
+async function generateToken(user) {
+  const token = await jwtSign(
+    { id: user.id, email: user.email },
     process.env.JWT_SECRET,
     { expiresIn: "1h" }
   );
+  return token;
 }
-
-module.exports = generateToken;
